@@ -1,4 +1,4 @@
-angular.module('twoLeggedOAuth', [])
+angular.module('angular-two-legged-oauth', [])
     .factory('twoLeggedOAuthInterceptor', ['$q', function ($q) {
 
     var absoluteUrl = function (url) {
