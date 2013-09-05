@@ -50,13 +50,13 @@ angular.module('angular-two-legged-oauth', [])
     };
 
     var buildAuthorizationHeader = function (realm, signature, requestParams) {
-        var authorization = 'OAuth realm="' + realm + '"';
+        var authorization = 'OAuth realm="' + encodeData(realm) + '"';
 
         var optionKeys = Object.keys(requestParams);
         for (var i = 0; i < optionKeys.length; i++) {
-            authorization += (', ' + optionKeys[i] + '="' + requestParams[optionKeys[i]] + '"' );
+            authorization += (', ' + encodeData(optionKeys[i]) + '="' + encodeData(requestParams[optionKeys[i]]) + '"' );
         }
-        authorization += ', oauth_signature="' + signature + '"';
+        authorization += ', oauth_signature="' + encodeData(signature) + '"';
         return authorization;
     };
 
