@@ -8,8 +8,7 @@ angular.module('angular-two-legged-oauth', [])
             if (url.indexOf("/") == 0) {
                 return window.location.origin + url;
             }
-            //TODO Handle unknown format of URL. This may be a relative path.
-            return url;
+            throw "Unknown request scheme";
         };
 
         var encodeData = function (data) {
