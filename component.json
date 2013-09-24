@@ -1,0 +1,12 @@
+{
+  "name": "angular-two-legged-oauth",
+  "version": "0.1.0",
+  "dependencies": {
+    "angular": ">= 1.1.4"
+  },
+  "homepage": "https://github.com/stil4m/angular-two-legged-oauth",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stil4m/angular-two-legged-oauth.git"
+  }
+
