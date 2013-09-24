@@ -72,6 +72,9 @@ angular.module('angular-two-legged-oauth', [])
                 if (interceptor.filter == null || interceptor.filter(config)) {
                     var requestParams = composeRequestParams(interceptor.configuration.options, config);
                     var signature = composeSignature(config, interceptor.configuration, requestParams, interceptor.configuration.signature_algorithm);
+                    if (ocnfig.headers == null) {
+                        config.headers = {};
+                    }
                     config.headers.Authorization = buildAuthorizationHeader(interceptor.configuration.realm, signature, requestParams);
                 }
                 return config || $q.when(config);
@@ -91,7 +94,7 @@ angular.module('angular-two-legged-oauth', [])
                         return text;
                     }
                 },
-                signature_algorithm: function (key, signatureBaseString) {
+                signature_algorithm: function (key) {
                     return encodeData(key);
                 }
             }
