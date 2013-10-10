@@ -21,7 +21,7 @@ angular.module('angular-two-legged-oauth', [])
             if (httpParams) {
                 var httpParamKeys = Object.keys(httpParams);
                 for (var k = 0; k < httpParamKeys.length; k++) {
-                    parameters[httpParamKeys[k]] = httpParams[httpParamKeys[k]];
+                    parameters[httpParamKeys[k]] = encodeData(httpParams[httpParamKeys[k]]);
                 }
             }
 
@@ -40,12 +40,14 @@ angular.module('angular-two-legged-oauth', [])
             var baseSignature = encodeData(httpConfig.method) + '&' + encodeData(absoluteUrl(httpConfig.url)) + '&' + encodeData(composeParameters(oAuthRequestParams, httpConfig.params));
             var secret = typeof(oAuthConfig.oauth_consumer_secret) == 'function' ? oAuthConfig.oauth_consumer_secret(httpConfig) : oAuthConfig.oauth_consumer_secret;
             var key = encodeData(secret) + '&' + (oAuthConfig.oauth_token_secret ? encodeData(oAuthConfig.oauth_token_secret) : '');
+            console.log(baseSignature);
             return signature_algorithm(key, baseSignature);
         };
 
         var composeRequestParams = function (options, httpConfig) {
             var answer = {};
             var optionKeys = Object.keys(options);
+
             for (var i = 0; i < optionKeys.length; i++) {
                 var value = options[optionKeys[i]];
                 if (typeof(value) == 'function') {
@@ -72,7 +74,7 @@ angular.module('angular-two-legged-oauth', [])
                 if (interceptor.filter == null || interceptor.filter(config)) {
                     var requestParams = composeRequestParams(interceptor.configuration.options, config);
                     var signature = composeSignature(config, interceptor.configuration, requestParams, interceptor.configuration.signature_algorithm);
-                    if (ocnfig.headers == null) {
+                    if (config  .headers == null) {
                         config.headers = {};
                     }
                     config.headers.Authorization = buildAuthorizationHeader(interceptor.configuration.realm, signature, requestParams);
