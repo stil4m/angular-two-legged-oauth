@@ -1,7 +1,7 @@
 {
   "name": "angular-two-legged-oauth",
-  "version": "0.2.0",
-  "main":  "src/main/angular-two-legged-oauth.js"
+  "version": "0.2.1",
+  "main":  "src/main/angular-two-legged-oauth.js",
   "dependencies": {
     "angular": ">= 1.1.4"
   },
