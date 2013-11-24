@@ -37,14 +37,9 @@ angular.module('angular-two-legged-oauth', [])
         };
 
         var composeSignature = function (httpConfig, oAuthConfig, oAuthRequestParams, signature_algorithm) {
-            oAuthRequestParams.oauth_timestamp = 1385130228;
-            oAuthRequestParams.oauth_nonce = "dww99Oa";
             var baseSignature = encodeData(httpConfig.method) + '&' + encodeData(absoluteUrl(httpConfig.url)) + '&' + encodeData(composeParameters(oAuthRequestParams, httpConfig.params));
             var secret = typeof(oAuthConfig.oauth_consumer_secret) == 'function' ? oAuthConfig.oauth_consumer_secret(httpConfig) : oAuthConfig.oauth_consumer_secret;
             var key = encodeData(secret) + '&' + (oAuthConfig.oauth_token_secret ? encodeData(oAuthConfig.oauth_token_secret) : '');
-
-            //hQfey2KWzMpZIzcRVOILhpbzapY%3D
-
             return signature_algorithm(key, baseSignature);
         };
 
