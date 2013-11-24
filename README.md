@@ -37,7 +37,7 @@ angular.module('myApp').run(['$rootScope', 'twoLeggedOAuthInterceptor', function
     b64pad = '=';
 }]);
 
-angular.module('customerPortal').config(function ($httpProvider) {
+angular.module('myApp').config(function ($httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
