@@ -6,7 +6,7 @@ angular.module('angular-two-legged-oauth', [])
                 return url;
             }
             if (url.indexOf("/") == 0) {
-                return window.location.origin + url;
+                return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + url;
             }
             throw "Unknown request scheme";
         };
