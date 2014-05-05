@@ -6,7 +6,7 @@ angular.module('angular-two-legged-oauth', [])
                 return url;
             }
             if (url.indexOf("/") == 0) {
-                return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + url;
+                return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + url.substr(0, url.indexOf('?'));
             }
             throw "Unknown request scheme";
         };
@@ -15,9 +15,21 @@ angular.module('angular-two-legged-oauth', [])
             return encodeURIComponent(data);
         };
 
-        var composeParameters = function (oauthParams, httpParams) {
+        var composeParameters = function (oauthParams, httpParams, httpUrl) {
             var parameters = angular.copy(oauthParams);
 
+            if (httpUrl) {
+              if (httpUrl.indexOf('?')) {
+                var suffix = httpUrl.substr(httpUrl.indexOf('?') + 1);
+                var params = suffix.split("&");
+                params.forEach(function(param) {
+                  if (param.indexOf('=')) {
+                    var paramComponents = param.split('=');
+                    parameters[paramComponents[0]] = paramComponents[1];
+                  }
+                });
+              }
+            }
             if (httpParams) {
                 var httpParamKeys = Object.keys(httpParams);
                 for (var k = 0; k < httpParamKeys.length; k++) {
@@ -37,7 +49,7 @@ angular.module('angular-two-legged-oauth', [])
         };
 
         var composeSignature = function (httpConfig, oAuthConfig, oAuthRequestParams, signature_algorithm) {
-            var baseSignature = encodeData(httpConfig.method) + '&' + encodeData(absoluteUrl(httpConfig.url)) + '&' + encodeData(composeParameters(oAuthRequestParams, httpConfig.params));
+            var baseSignature = encodeData(httpConfig.method) + '&' + encodeData(absoluteUrl(httpConfig.url)) + '&' + encodeData(composeParameters(oAuthRequestParams, httpConfig.params, httpConfig.url));
             var secret = typeof(oAuthConfig.oauth_consumer_secret) == 'function' ? oAuthConfig.oauth_consumer_secret(httpConfig) : oAuthConfig.oauth_consumer_secret;
             var key = encodeData(secret) + '&' + (oAuthConfig.oauth_token_secret ? encodeData(oAuthConfig.oauth_token_secret) : '');
             return signature_algorithm(key, baseSignature);
@@ -102,3 +114,4 @@ angular.module('angular-two-legged-oauth', [])
         };
         return interceptor;
     }]);
+
