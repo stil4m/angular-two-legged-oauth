@@ -2,11 +2,15 @@ angular.module('angular-two-legged-oauth', [])
     .factory('twoLeggedOAuthInterceptor', ['$q', function ($q) {
 
         var absoluteUrl = function (url) {
-            if (url.indexOf("http://") == 0 || url.indexOf("https://") == 0) {
-                return url;
+          var toAppend = url;
+          if (toAppend.indexOf('?') !== -1) {
+            toAppend = toAppend.substr(0, url.indexOf('?'))
+          }
+          if (url.indexOf("http://") == 0 || url.indexOf("https://") == 0) {
+                return toAppend;
             }
             if (url.indexOf("/") == 0) {
-                return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + url.substr(0, url.indexOf('?'));
+                return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + toAppend;
             }
             throw "Unknown request scheme";
         };
@@ -50,6 +54,7 @@ angular.module('angular-two-legged-oauth', [])
 
         var composeSignature = function (httpConfig, oAuthConfig, oAuthRequestParams, signature_algorithm) {
             var baseSignature = encodeData(httpConfig.method) + '&' + encodeData(absoluteUrl(httpConfig.url)) + '&' + encodeData(composeParameters(oAuthRequestParams, httpConfig.params, httpConfig.url));
+          debugger;
             var secret = typeof(oAuthConfig.oauth_consumer_secret) == 'function' ? oAuthConfig.oauth_consumer_secret(httpConfig) : oAuthConfig.oauth_consumer_secret;
             var key = encodeData(secret) + '&' + (oAuthConfig.oauth_token_secret ? encodeData(oAuthConfig.oauth_token_secret) : '');
             return signature_algorithm(key, baseSignature);
@@ -114,4 +119,5 @@ angular.module('angular-two-legged-oauth', [])
         };
         return interceptor;
     }]);
+
 
