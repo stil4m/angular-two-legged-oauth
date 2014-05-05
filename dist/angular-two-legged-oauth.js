@@ -23,7 +23,7 @@ angular.module('angular-two-legged-oauth', [])
             var parameters = angular.copy(oauthParams);
 
             if (httpUrl) {
-              if (httpUrl.indexOf('?')) {
+              if (httpUrl.indexOf('?') !== -1) {
                 var suffix = httpUrl.substr(httpUrl.indexOf('?') + 1);
                 var params = suffix.split("&");
                 params.forEach(function(param) {
@@ -54,7 +54,6 @@ angular.module('angular-two-legged-oauth', [])
 
         var composeSignature = function (httpConfig, oAuthConfig, oAuthRequestParams, signature_algorithm) {
             var baseSignature = encodeData(httpConfig.method) + '&' + encodeData(absoluteUrl(httpConfig.url)) + '&' + encodeData(composeParameters(oAuthRequestParams, httpConfig.params, httpConfig.url));
-          debugger;
             var secret = typeof(oAuthConfig.oauth_consumer_secret) == 'function' ? oAuthConfig.oauth_consumer_secret(httpConfig) : oAuthConfig.oauth_consumer_secret;
             var key = encodeData(secret) + '&' + (oAuthConfig.oauth_token_secret ? encodeData(oAuthConfig.oauth_token_secret) : '');
             return signature_algorithm(key, baseSignature);
@@ -119,5 +118,6 @@ angular.module('angular-two-legged-oauth', [])
         };
         return interceptor;
     }]);
+
 
 
